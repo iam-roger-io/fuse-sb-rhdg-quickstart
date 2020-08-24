@@ -14,9 +14,7 @@ data:
 
     infinispan.hotrod.password=jujuba
 
-    infinispan.hosrod.trustStoreFileName=/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
-
-    custom.rhdg.cache.name=mycache server.port=8080
+    infinispan.hotrod.trustStoreFileName=/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
 
     custom.rhdg.cache.name=mycache
     
