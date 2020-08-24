@@ -35,7 +35,7 @@ public class RemoteCacheConfig {
  	@Value("${infinispan.hotrod.password}")
  	private String password;
  	
- 	@Value("${infinispan.hosrod.trustStoreFileName}")
+ 	@Value("${infinispan.hotrod.trustStoreFileName}")
  	private String trustStore;
  	
  	@Value("${infinispan.client.hotrod.socket_timeout}")
@@ -50,7 +50,7 @@ public class RemoteCacheConfig {
  	@Value("${infinispan.client.hotrod.max_retries}")
  	private  Integer maxRetries; 	
 	
-	private static Logger LOGGER = LoggerFactory.getLogger(RouteDSLSample.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(RemoteCacheConfig.class);
  	
 	 @Bean
 	 /*
@@ -65,62 +65,59 @@ public class RemoteCacheConfig {
       * A abordagem recomendada é ter uma única instância do RemoteCacheManager para cada Java Virtual Machine (JVM).
       *
 	  */
-	 public RemoteCacheManager remoteCacheManagerExample() {
-   		 
-		LOGGER.info("###### host: " + host);
-		LOGGER.info("###### port: " + port);
-		LOGGER.info("###### Cache: " + cacheName);
-		LOGGER.info("###### username: '" + username + "'");
-		LOGGER.info("###### password: '" + password + "'");
-		LOGGER.info("###### trustStore: " + trustStore);
-				 
-		ConfigurationBuilder builder =  new ConfigurationBuilder();
-        		
-	    builder.addServer().host(host).port(port);
-	    
-	    if (null != username && !username.equalsIgnoreCase("")) {
-		    builder.security()
-			        // Authentication
-			        .authentication().enable()
-			        .username(username)
-			        .password(password)
-			        .serverName("datagrid-service")
-			        .saslMechanism("DIGEST-MD5")		        
-			        .saslQop(SaslQop.AUTH)			
-			        .ssl()
-			       .trustStorePath(trustStore);		 		    
-	    }    
-		    
-        /*
-         *List of nodes that make up the cluster to connect.
-         *Lista de nodes que formam o cluster            
-         * 
-         */
-     //   builder.addServers("cache-service:11222");
-       
-        /*
-         * This property defines the maximum socket read timeout in milliseconds before giving up waiting for bytes from the server.
-         * Essa propriedade define em milesegundos o timeout do socket  de leitura.
-         */
-        builder.socketTimeout(socketTimeout);
-        
-        /*
-         * This property defines the maximum socket connect timeout before giving up connecting to the server.
-         * Propriedade que define o tempo maximo de conexão no socket.
-         */
-        builder.connectionTimeout(connecionTimeout);
-        
-        /*
-         * It sets the maximum number of retries for each request. A valid value should be greater or equals than 0 (zero). 
-         * Zero means no retry will made in case of a network failure. It defaults to 10.
-         * 
-         * Define a quantidadede retentativas para cada request feita. Os valores devem ser superior a 0, onde 0 significa sem tentativas. O valor default é 10.
+      public RemoteCacheManager remoteCacheManagerExample() {
+
+      LOGGER.info("###### host: " + host);
+      LOGGER.info("###### port: " + port);
+      LOGGER.info("###### Cache: " + cacheName);
+      LOGGER.info("###### username: '" + username + "'");
+      LOGGER.info("###### password: '" + password + "'");
+      LOGGER.info("###### trustStore: " + trustStore);
+
+      ConfigurationBuilder builder =  new ConfigurationBuilder();
+
+      builder.addServer().host(host).port(port);
+
+      if (null != username && !username.equalsIgnoreCase("")) {
+          builder.security()
+        // Authentication
+        .authentication().enable()
+        .username(username)
+        .password(password)
+        .serverName("datagrid-service")
+        .saslMechanism("DIGEST-MD5")		        
+        .saslQop(SaslQop.AUTH)			
+        .ssl()
+           .trustStorePath(trustStore);		 		    
+      }    
+
+	/*
+	 *List of nodes that make up the cluster to connect.
+	 *Lista de nodes que formam o cluster            
+	 * 
+	 */
+	//   builder.addServers("cache-service:11222");
+
+	/*
+	 * This property defines the maximum socket read timeout in milliseconds before giving up waiting for bytes from the server.
+	 * Essa propriedade define em milesegundos o timeout do socket  de leitura.
+	 */
+	builder.socketTimeout(socketTimeout);
+
+	/*
+	 * This property defines the maximum socket connect timeout before giving up connecting to the server.
+	 * Propriedade que define o tempo maximo de conexão no socket.
+	 */
+	builder.connectionTimeout(connecionTimeout);
+
+	/*
+	 * It sets the maximum number of retries for each request. A valid value should be greater or equals than 0 (zero). 
+	 * Zero means no retry will made in case of a network failure. It defaults to 10.
+	 * 
+	 * Define a quantidadede retentativas para cada request feita. Os valores devem ser superior a 0, onde 0 significa sem tentativas. O valor default é 10.
 		 *
-         */
-        builder.maxRetries(maxRetries);	    
-        	 
-		 
+	 */
+	builder.maxRetries(maxRetries);	    
 		return new RemoteCacheManager(builder.build());
-	 
 	 }
 }
